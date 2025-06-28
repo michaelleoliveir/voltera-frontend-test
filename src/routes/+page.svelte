@@ -4,17 +4,17 @@
 
 <!-- criando a parte visual -->
 <main>
-	<div id="parte-input">
-		<div id="titulo">
-			<h1 id="titulo-principal">Insira seu <span>nome</span></h1>
-			<h2 id="subtitulo">E descobriremos sua <span>idade</span></h2>
+	<div id="input-part">
+		<div id="title">
+			<h1 id="main-title">Insira seu <span>nome</span></h1>
+			<h2 id="subtitle">E descobriremos sua <span>idade</span></h2>
 		</div>
 		<input type="text" placeholder="Digite o seu nome..." />
 	</div>
 
-    <div id="linha"></div>
+    <div id="line"></div>
 
-	<div id="parte-resposta">
+	<div id="anwser-part">
 		<h1>Teste</h1>
 	</div>
 </main>
@@ -34,13 +34,13 @@
 		gap: 4rem;
 	}
 
-	#subtitulo span {
+	#subtitle span {
 		font-style: italic;
 		color: #eb3b5a;
 	}
 
-	#parte-input,
-	#parte-resposta {
+	#input-part,
+	#anwser-part {
         flex: 1;
 		width: 50%;
 		display: flex;
@@ -49,23 +49,23 @@
 		justify-content: center;
 	}
 
-    #linha {
+    #line {
         height: 100%;
         width: 2px;
         background-color: #eb3b5b81;
     }
 
-	#titulo {
+	#title {
 		text-align: center;
 	}
 
-	#titulo-principal {
+	#main-title {
 		font-size: 2.5rem;
 		margin-bottom: 0rem;
 		font-family: 'Roboto Mono', monospace;
 	}
 
-	#subtitulo {
+	#subtitle {
 		font-size: 2rem;
 		margin-top: 0.5rem;
 		font-family: 'Roboto Mono', monospace;
