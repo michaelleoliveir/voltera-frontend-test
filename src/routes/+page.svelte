@@ -7,7 +7,25 @@
 -->
 
 <!-- script para fazer a funcionalidade do código -->
-<script>
+<script lang="ts">
+	import { goto } from "$app/navigation";
+
+	let name = '';
+	let timeout: ReturnType<typeof setTimeout>;
+
+	function handleInput(e: Event) {
+		clearTimeout(timeout);
+
+		name = (e.target as HTMLInputElement).value.trim();
+
+		timeout = setTimeout(() => {
+			if(name) {
+				goto(`/?name=${encodeURIComponent(name)}`, {replaceState: true, keepFocus: true});
+			} else {
+				goto('/', {replaceState: true, keepFocus: true});
+			}
+		}, 800)
+	}
 </script>
 
 <!-- criando a parte visual -->
@@ -25,6 +43,7 @@
 				name="text"
 				type="text"
 				autocomplete="off"
+				on:input={handleInput}
 			/>
 
 			<label class="labelforsearch" for="input">
