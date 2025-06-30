@@ -61,6 +61,8 @@
 
 <!-- estilização -->
 <style>
+	@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
 	* {
 		background-color: #f5f5f4;
 		color: #444444;
@@ -131,8 +133,8 @@
 	}
 
 	#explanation-answer {
-		font-size: 1.2rem;
-		font-family: 'Roboto', sans-serif;
+		font-size: 1.3rem;
+		font-family: "DM Sans", sans-serif;
 		text-align: center;
 		margin-top: 1rem;
 		margin-bottom: 2rem;
@@ -157,7 +159,7 @@
 	}
 
 	.input {
-		font-family: 'Roboto Mono', sans-serif;
+		font-family: "DM Sans", sans-serif;
 		width: 240px;
 		border: none;
 		outline: none;
