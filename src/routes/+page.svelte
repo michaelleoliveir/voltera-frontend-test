@@ -10,6 +10,7 @@
 	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
+	$: error = $page.data.error;
 	$: age = $page.data.age;
 	$: personalMessage = getPersonalMessage(age);
 	$: name = $page.url.searchParams.get('name') ?? '';
@@ -58,14 +59,23 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Agify.io</title>
+	<link
+		href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+		rel="stylesheet"
+	/>
+</svelte:head>
+
 <!-- criando a parte visual -->
 <main>
+	
 	<div id="input-part">
 		<div id="title">
 			<h1 id="main-title">Insira seu nome</h1>
 			<h2 id="subtitle">E descobriremos sua <span>idade</span></h2>
 		</div>
-		<div class="InputContainer">
+		<div class="input-container">
 			<input
 				placeholder="Digite seu nome..."
 				id="input"
@@ -76,8 +86,8 @@
 				on:input={handleInput}
 			/>
 
-			<label class="labelforsearch" for="input">
-				<svg class="searchIcon" viewBox="0 0 512 512">
+			<label class="label-for-search" for="input">
+				<svg class="search-icon" viewBox="0 0 512 512">
 					<path
 						d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
 					></path>
@@ -92,13 +102,35 @@
 		<div id="loading-part">
 			<span class="loader"></span>
 		</div>
+	{:else if error}
+		<div id="error-part">
+			<svg
+				viewBox="0 0 24 24"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				width="85"
+				height="85"
+				stroke="#eb3b5a"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="feather feather-alert-triangle"
+			>
+				<path
+					d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+				/>
+				<line x1="12" y1="9" x2="12" y2="13" />
+				<line x1="12" y1="17" x2="12.01" y2="17" />
+			</svg>
+			<h1 id="main-title-error">Ops, algo deu errado!</h1>
+			<p id="explanation-error">Não encontramos uma idade para esse nome. Verifique se foi digitado corretamente.</p>
+		</div>
 	{:else if age === null}
 		<div id="answer-part">
 			<h1 id="main-title-answer">Bem vindos ao <span>agify.io</span>!</h1>
 			<p id="explanation-answer">
 				Essa aplicação utiliza a API gratuita <span>agify.io</span>, que estima a idade de uma
-				pessoa com base no nome fornecido. Basta digitar um nome do lado esquerdo e descobrir a
-				mágica!
+				pessoa com base no nome fornecido. Basta digitar um nome e descobrir a mágica!
 			</p>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -145,12 +177,11 @@
 
 <!-- estilização -->
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
-
 	* {
 		background-color: #f5f5f4;
 		color: #444444;
 	}
+
 	main {
 		height: 100vh;
 		display: flex;
@@ -170,8 +201,9 @@
 
 	#input-part,
 	#answer-part,
-	#answer-part-data, 
-	#loading-part {
+	#answer-part-data,
+	#loading-part,
+	#error-part {
 		flex: 1;
 		width: 50%;
 		display: flex;
@@ -192,8 +224,10 @@
 	}
 
 	#main-title,
-	#main-title-answer {
+	#main-title-answer,
+	#main-title-error {
 		font-family: 'Roboto Mono', monospace;
+		text-align: center;
 	}
 
 	#main-title {
@@ -205,11 +239,14 @@
 		font-size: 2rem;
 	}
 
+	#main-title-error {
+		margin-bottom: 0rem;
+	}
+
 	#subtitle {
 		font-size: 2.5rem;
 		margin-top: 0rem;
 		font-family: 'Roboto Mono', monospace;
-
 		overflow: hidden;
 		white-space: nowrap;
 		border-right: 2px solid;
@@ -219,6 +256,7 @@
 	}
 
 	#explanation-answer,
+	#explanation-error,
 	#answer {
 		font-family: 'DM Sans', sans-serif;
 		text-align: center;
@@ -227,6 +265,12 @@
 	}
 
 	#explanation-answer {
+		font-size: 1.3rem;
+		margin-top: 1rem;
+		margin-bottom: 2rem;
+	}
+
+	#explanation-error {
 		font-size: 1.3rem;
 		margin-top: 1rem;
 		margin-bottom: 2rem;
@@ -250,7 +294,7 @@
 		height: 65px;
 	}
 
-	.InputContainer {
+	.input-container {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -272,18 +316,18 @@
 		background-color: white;
 	}
 
-	.labelforsearch {
+	.label-for-search {
 		cursor: text;
 		padding: 0px 12px;
 		background-color: white;
 	}
 
-	.searchIcon {
+	.search-icon {
 		width: 13px;
 		background-color: white;
 	}
 
-	.searchIcon path {
+	.search-icon path {
 		fill: #eb3b5a;
 	}
 
@@ -411,6 +455,38 @@
 		}
 		50% {
 			transform: translateX(-10px);
+		}
+	}
+
+	@media only screen and (max-width: 768px) {
+		main {
+			flex-direction: column;
+			gap: 2rem;
+			padding: 0rem 1rem 5rem 1rem;
+		}
+
+		#input-part,
+		#answer-part,
+		#answer-part-data,
+		#loading-part {
+			width: 80%;
+			padding: 2rem 1rem;
+		}
+
+		#line {
+			display: none;
+		}
+
+		#main-title {
+			font-size: 1.9rem;
+		}
+
+		#subtitle {
+			font-size: 1.7rem;
+		}
+
+		#answer-part svg {
+			display: none;
 		}
 	}
 </style>
