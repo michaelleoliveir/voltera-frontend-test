@@ -153,8 +153,8 @@ span {
 
 #explanation-answer {
     font-size: 1.3rem;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
     padding: 0.3rem 2.5rem;
 }
 
@@ -165,6 +165,7 @@ span {
 }
 
 #answer {
+    width: 75%;
     font-size: 1.1rem;
     background-color: var(--primary-color);
     padding: 1rem;
