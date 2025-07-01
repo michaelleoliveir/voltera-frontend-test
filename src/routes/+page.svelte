@@ -7,13 +7,14 @@
 
 <!-- script para fazer a funcionalidade do código -->
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	$: age = $page.data.age;
 	$: personalMessage = getPersonalMessage(age);
 	$: name = $page.url.searchParams.get('name') ?? '';
 
+	let loading = false;
 	let inputName = '';
 	let timeout: ReturnType<typeof setTimeout>;
 
@@ -23,6 +24,7 @@
 		inputName = (e.target as HTMLInputElement).value.trim();
 
 		timeout = setTimeout(() => {
+			loading = true;
 			if (inputName) {
 				goto(`/?name=${encodeURIComponent(inputName)}`, { replaceState: true, keepFocus: true });
 			} else {
@@ -30,6 +32,14 @@
 			}
 		}, 1000);
 	}
+
+	beforeNavigate(() => {
+		loading = true;
+	});
+
+	afterNavigate(() => {
+		loading = false;
+	});
 
 	function getPersonalMessage(age: number | null): string {
 		if (age === null) return '';
@@ -78,7 +88,11 @@
 
 	<div id="line"></div>
 
-	{#if age == null}
+	{#if loading}
+		<div id="loading-part">
+			<span class="loader"></span>
+		</div>
+	{:else if age === null}
 		<div id="answer-part">
 			<h1 id="main-title-answer">Bem vindos ao <span>agify.io</span>!</h1>
 			<p id="explanation-answer">
@@ -156,7 +170,8 @@
 
 	#input-part,
 	#answer-part,
-	#answer-part-data {
+	#answer-part-data, 
+	#loading-part {
 		flex: 1;
 		width: 50%;
 		display: flex;
@@ -270,6 +285,108 @@
 
 	.searchIcon path {
 		fill: #eb3b5a;
+	}
+
+	.loader {
+		font-size: 10px;
+		width: 1em;
+		height: 1em;
+		border-radius: 50%;
+		position: relative;
+		text-indent: -9999em;
+		animation: spinner 1.1s infinite ease;
+		transform: translateZ(0);
+	}
+	@keyframes spinner {
+		0%,
+		100% {
+			box-shadow:
+				0em -2.6em 0em 0em #eb3b5a,
+				1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2),
+				2.5em 0em 0 0em rgba(235, 59, 90, 0.2),
+				1.75em 1.75em 0 0em rgba(235, 59, 90, 0.2),
+				0em 2.5em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em 1.8em 0 0em rgba(235, 59, 90, 0.2),
+				-2.6em 0em 0 0em rgba(235, 59, 90, 0.5),
+				-1.8em -1.8em 0 0em rgba(235, 59, 90, 0.7);
+		}
+		12.5% {
+			box-shadow:
+				0em -2.6em 0em 0em rgba(235, 59, 90, 0.7),
+				1.8em -1.8em 0 0em #eb3b5a,
+				2.5em 0em 0 0em rgba(235, 59, 90, 0.2),
+				1.75em 1.75em 0 0em rgba(235, 59, 90, 0.2),
+				0em 2.5em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em 1.8em 0 0em rgba(235, 59, 90, 0.2),
+				-2.6em 0em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em -1.8em 0 0em rgba(235, 59, 90, 0.5);
+		}
+		25% {
+			box-shadow:
+				0em -2.6em 0em 0em rgba(235, 59, 90, 0.5),
+				1.8em -1.8em 0 0em rgba(235, 59, 90, 0.7),
+				2.5em 0em 0 0em #eb3b5a,
+				1.75em 1.75em 0 0em rgba(235, 59, 90, 0.2),
+				0em 2.5em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em 1.8em 0 0em rgba(235, 59, 90, 0.2),
+				-2.6em 0em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2);
+		}
+		37.5% {
+			box-shadow:
+				0em -2.6em 0em 0em rgba(235, 59, 90, 0.2),
+				1.8em -1.8em 0 0em rgba(235, 59, 90, 0.5),
+				2.5em 0em 0 0em rgba(235, 59, 90, 0.7),
+				1.75em 1.75em 0 0em #eb3b5a,
+				0em 2.5em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em 1.8em 0 0em rgba(235, 59, 90, 0.2),
+				-2.6em 0em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2);
+		}
+		50% {
+			box-shadow:
+				0em -2.6em 0em 0em rgba(235, 59, 90, 0.2),
+				1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2),
+				2.5em 0em 0 0em rgba(235, 59, 90, 0.5),
+				1.75em 1.75em 0 0em rgba(235, 59, 90, 0.7),
+				0em 2.5em 0 0em #eb3b5a,
+				-1.8em 1.8em 0 0em rgba(235, 59, 90, 0.2),
+				-2.6em 0em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2);
+		}
+		62.5% {
+			box-shadow:
+				0em -2.6em 0em 0em rgba(235, 59, 90, 0.2),
+				1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2),
+				2.5em 0em 0 0em rgba(235, 59, 90, 0.2),
+				1.75em 1.75em 0 0em rgba(235, 59, 90, 0.5),
+				0em 2.5em 0 0em rgba(235, 59, 90, 0.7),
+				-1.8em 1.8em 0 0em #eb3b5a,
+				-2.6em 0em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2);
+		}
+		75% {
+			box-shadow:
+				0em -2.6em 0em 0em rgba(235, 59, 90, 0.2),
+				1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2),
+				2.5em 0em 0 0em rgba(235, 59, 90, 0.2),
+				1.75em 1.75em 0 0em rgba(235, 59, 90, 0.2),
+				0em 2.5em 0 0em rgba(235, 59, 90, 0.5),
+				-1.8em 1.8em 0 0em rgba(235, 59, 90, 0.7),
+				-2.6em 0em 0 0em #eb3b5a,
+				-1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2);
+		}
+		87.5% {
+			box-shadow:
+				0em -2.6em 0em 0em rgba(235, 59, 90, 0.2),
+				1.8em -1.8em 0 0em rgba(235, 59, 90, 0.2),
+				2.5em 0em 0 0em rgba(235, 59, 90, 0.2),
+				1.75em 1.75em 0 0em rgba(235, 59, 90, 0.2),
+				0em 2.5em 0 0em rgba(235, 59, 90, 0.2),
+				-1.8em 1.8em 0 0em rgba(235, 59, 90, 0.5),
+				-2.6em 0em 0 0em rgba(235, 59, 90, 0.7),
+				-1.8em -1.8em 0 0em #eb3b5a;
+		}
 	}
 
 	@keyframes typing {
