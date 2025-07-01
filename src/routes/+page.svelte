@@ -18,6 +18,7 @@
 	let loading = false;
 	let inputName = '';
 	let timeout: ReturnType<typeof setTimeout>;
+	let isDark = false;
 
 	function handleInput(e: Event) {
 		clearTimeout(timeout);
@@ -57,6 +58,10 @@
 			return 'A vida é um presente em todas as idades. Sua experiência é valiosa e merece ser celebrada!';
 		}
 	}
+
+	function toggleTheme() {
+		isDark = !isDark;
+	}
 </script>
 
 <svelte:head>
@@ -68,127 +73,206 @@
 </svelte:head>
 
 <!-- criando a parte visual -->
-<main>
-	
-	<div id="input-part">
-		<div id="title">
-			<h1 id="main-title">Insira seu nome</h1>
-			<h2 id="subtitle">E descobriremos sua <span>idade</span></h2>
-		</div>
-		<div class="input-container">
-			<input
-				placeholder="Digite seu nome..."
-				id="input"
-				class="input"
-				name="text"
-				type="text"
-				autocomplete="off"
-				on:input={handleInput}
-			/>
-
-			<label class="label-for-search" for="input">
-				<svg class="search-icon" viewBox="0 0 512 512">
-					<path
-						d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-					></path>
-				</svg>
-			</label>
-		</div>
+<main class:dark-toggle={isDark}>
+	<div id="toggle">
+		<button
+			aria-label="Toggle Button"
+			id="toggle-button"
+			class:dark-toggle={isDark}
+			on:click={toggleTheme}
+		>
+			<div id="toggle-indicator" class:dark-toggle={isDark}></div>
+		</button>
 	</div>
 
-	<div id="line"></div>
+	<div id="wrapper">
+		<div id="input-part">
+			<div id="title">
+				<h1 id="main-title">Insira seu nome</h1>
+				<h2 id="subtitle">E descobriremos sua <span>idade</span></h2>
+			</div>
+			<div id="input-container">
+				<input
+					placeholder="Digite seu nome..."
+					id="input"
+					class="input"
+					name="text"
+					type="text"
+					autocomplete="off"
+					on:input={handleInput}
+				/>
+				<label class="label-for-search" for="input">
+					<svg class="search-icon" viewBox="0 0 512 512">
+						<path
+							d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+						></path>
+					</svg>
+				</label>
+			</div>
+		</div>
 
-	{#if loading}
-		<div id="loading-part">
-			<span class="loader"></span>
-		</div>
-	{:else if error}
-		<div id="error-part">
-			<svg
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				width="85"
-				height="85"
-				stroke="#eb3b5a"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="feather feather-alert-triangle"
-			>
-				<path
-					d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-				/>
-				<line x1="12" y1="9" x2="12" y2="13" />
-				<line x1="12" y1="17" x2="12.01" y2="17" />
-			</svg>
-			<h1 id="main-title-error">Ops, algo deu errado!</h1>
-			<p id="explanation-error">Não encontramos uma idade para esse nome. Verifique se foi digitado corretamente.</p>
-		</div>
-	{:else if age === null}
-		<div id="answer-part">
-			<h1 id="main-title-answer">Bem vindos ao <span>agify.io</span>!</h1>
-			<p id="explanation-answer">
-				Essa aplicação utiliza a API gratuita <span>agify.io</span>, que estima a idade de uma
-				pessoa com base no nome fornecido. Basta digitar um nome e descobrir a mágica!
-			</p>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 128 128"
-				width="55"
-				height="55"
-				fill="#eb3b5a"
-			>
-				<path
-					d="M64 .3C28.7.3 0 28.8 0 64s28.7 63.7 64 63.7 64-28.5 64-63.7S99.3.3 64 .3zm0 121C32.2 121.3 6.4 95.7 6.4 64 6.4 32.3 32.2 6.7 64 6.7s57.6 25.7 57.6 57.3c0 31.7-25.8 57.3-57.6 57.3zm1.3-82.8L41.6 64l23.6 25.5h13.5L54.4 64l24.4-25.5H65.3z"
-				/>
-			</svg>
-		</div>
-	{:else}
-		<div id="answer-part-data">
-			<svg
-				fill="#eb3b5b"
-				viewBox="-3.2 -3.2 38.40 38.40"
-				version="1.1"
-				xmlns="http://www.w3.org/2000/svg"
-				stroke="#eb3b5b"
-				transform="matrix(1, 0, 0, 1, 0, 0)"
-				><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
-					id="SVGRepo_tracerCarrier"
+		<div id="line"></div>
+
+		{#if loading}
+			<div id="loading-part">
+				<span id="loader"></span>
+			</div>
+		{:else if error}
+			<div id="error-part">
+				<svg
+					viewBox="0 0 24 24"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					width="85"
+					height="85"
+					stroke="#eb3b5a"
+					stroke-width="2"
 					stroke-linecap="round"
 					stroke-linejoin="round"
-					stroke="#CCCCCC"
-					stroke-width="0.32"
-				></g><g id="SVGRepo_iconCarrier">
-					<title>glasses</title>
+					class="feather feather-alert-triangle"
+				>
 					<path
-						d="M30 15.25h-1.326c-0.374-2.835-2.775-5-5.682-5-2.804 0-5.138 2.015-5.632 4.677l-0.005 0.035c-0.406-0.124-0.872-0.195-1.355-0.195s-0.949 0.071-1.389 0.204l0.034-0.009c-0.499-2.697-2.833-4.712-5.637-4.712-2.907 0-5.308 2.165-5.679 4.971l-0.003 0.029h-1.326c-0.414 0-0.75 0.336-0.75 0.75s0.336 0.75 0.75 0.75v0h1.326c0.369 2.834 2.768 5 5.673 5 2.981 0 5.429-2.281 5.695-5.193l0.002-0.022c0.385-0.164 0.834-0.259 1.304-0.259s0.919 0.095 1.327 0.267l-0.022-0.008c0.267 2.934 2.715 5.215 5.697 5.215 2.905 0 5.304-2.166 5.67-4.971l0.003-0.029h1.326c0.414 0 0.75-0.336 0.75-0.75s-0.336-0.75-0.75-0.75v0zM9 20.25c-2.347 0-4.25-1.903-4.25-4.25s1.903-4.25 4.25-4.25c2.347 0 4.25 1.903 4.25 4.25v0c-0.003 2.346-1.904 4.247-4.25 4.25h-0zM23 20.25c-2.347 0-4.25-1.903-4.25-4.25s1.903-4.25 4.25-4.25c2.347 0 4.25 1.903 4.25 4.25v0c-0.003 2.346-1.904 4.247-4.25 4.25h-0z"
-					></path>
-				</g></svg
-			>
-			<h1 id="main-title-answer">De acordo com nossos dados...</h1>
-			<p id="explanation-answer">
-				A idade estimada para <span>{name}</span> é de <span>{age}</span> anos!
-			</p>
-			<p id="answer">{personalMessage}</p>
-		</div>
-	{/if}
+						d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+					/>
+					<line x1="12" y1="9" x2="12" y2="13" />
+					<line x1="12" y1="17" x2="12.01" y2="17" />
+				</svg>
+				<h1 id="main-title-error">Ops, algo deu errado!</h1>
+				<p id="explanation-error">
+					Não encontramos uma idade para esse nome. Verifique se foi digitado corretamente.
+				</p>
+			</div>
+		{:else if age === null}
+			<div id="answer-part">
+				<h1 id="main-title-answer">Bem vindos ao <span>agify.io</span>!</h1>
+				<p id="explanation-answer">
+					Essa aplicação utiliza a API gratuita <span>agify.io</span>, que estima a idade de uma
+					pessoa com base no nome fornecido. Basta digitar um nome e descobrir a mágica!
+				</p>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 128 128"
+					width="55"
+					height="55"
+					fill="#eb3b5a"
+				>
+					<path
+						d="M64 .3C28.7.3 0 28.8 0 64s28.7 63.7 64 63.7 64-28.5 64-63.7S99.3.3 64 .3zm0 121C32.2 121.3 6.4 95.7 6.4 64 6.4 32.3 32.2 6.7 64 6.7s57.6 25.7 57.6 57.3c0 31.7-25.8 57.3-57.6 57.3zm1.3-82.8L41.6 64l23.6 25.5h13.5L54.4 64l24.4-25.5H65.3z"
+					/>
+				</svg>
+			</div>
+		{:else}
+			<div id="answer-part-data">
+				<svg
+					fill="#eb3b5b"
+					viewBox="-3.2 -3.2 38.40 38.40"
+					version="1.1"
+					xmlns="http://www.w3.org/2000/svg"
+					stroke="#eb3b5b"
+					transform="matrix(1, 0, 0, 1, 0, 0)"
+					><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+						id="SVGRepo_tracerCarrier"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke="#CCCCCC"
+						stroke-width="0.32"
+					></g><g id="SVGRepo_iconCarrier">
+						<title>glasses</title>
+						<path
+							d="M30 15.25h-1.326c-0.374-2.835-2.775-5-5.682-5-2.804 0-5.138 2.015-5.632 4.677l-0.005 0.035c-0.406-0.124-0.872-0.195-1.355-0.195s-0.949 0.071-1.389 0.204l0.034-0.009c-0.499-2.697-2.833-4.712-5.637-4.712-2.907 0-5.308 2.165-5.679 4.971l-0.003 0.029h-1.326c-0.414 0-0.75 0.336-0.75 0.75s0.336 0.75 0.75 0.75v0h1.326c0.369 2.834 2.768 5 5.673 5 2.981 0 5.429-2.281 5.695-5.193l0.002-0.022c0.385-0.164 0.834-0.259 1.304-0.259s0.919 0.095 1.327 0.267l-0.022-0.008c0.267 2.934 2.715 5.215 5.697 5.215 2.905 0 5.304-2.166 5.67-4.971l0.003-0.029h1.326c0.414 0 0.75-0.336 0.75-0.75s-0.336-0.75-0.75-0.75v0zM9 20.25c-2.347 0-4.25-1.903-4.25-4.25s1.903-4.25 4.25-4.25c2.347 0 4.25 1.903 4.25 4.25v0c-0.003 2.346-1.904 4.247-4.25 4.25h-0zM23 20.25c-2.347 0-4.25-1.903-4.25-4.25s1.903-4.25 4.25-4.25c2.347 0 4.25 1.903 4.25 4.25v0c-0.003 2.346-1.904 4.247-4.25 4.25h-0z"
+						></path>
+					</g></svg
+				>
+				<h1 id="main-title-answer">De acordo com nossos dados...</h1>
+				<p id="explanation-answer">
+					A idade estimada para <span>{name}</span> é de <span>{age}</span> anos!
+				</p>
+				<p id="answer">{personalMessage}</p>
+			</div>
+		{/if}
+	</div>
 </main>
 
 <!-- estilização -->
 <style>
+	:root {
+		--bg-color: #f5f5f4;
+		--text-color: #444;
+		--primary-color: #eb3b5a;
+		--input-bg: #fff;
+		--input-text: #444;
+	}
+
+	main.dark-toggle {
+		--bg-color: #1a1a1a;
+		--text-color: #f5f5f5;
+		--input-bg: #333;
+		--input-text: #f5f5f5;
+	}
+
 	* {
-		background-color: #f5f5f4;
-		color: #444444;
+		background-color: var(--bg-color);
+		color: var(--text-color);
 	}
 
 	main {
+		width: 100%;
+		max-width: 100vw;
 		height: 100vh;
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 4rem;
+	}
+
+	#wrapper {
+		display: flex;
+		flex-direction: row;
+		gap: 2rem;
+		height: 90%;
+		width: 100%;
+	}
+
+	#toggle {
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
+		height: 5%;
+		margin-top: 2rem;
+		margin-right: 3rem;
+	}
+
+	#toggle-button {
+		display: flex;
+		align-items: center;
+
+		width: 6rem;
+		height: 2.5rem;
+		background-color: var(--primary-color);
+		border: 0rem;
+		border-radius: 1.5rem;
+		position: relative;
+		cursor: pointer;
+	}
+
+	#toggle-indicator {
+		width: 2.5rem;
+		height: 2.5rem;
+		left: 0rem;
+		background-color: var(--bg-color);
+		border-radius: 1.5rem;
+		transform: scale(0.7);
+		transition: left 0.3s ease;
+		position: absolute;
+	}
+
+	#toggle-indicator.dark-toggle {
+		left: 3.4rem;
+		background-color: var(--primary-color);
+	}
+
+	#toggle-button.dark-toggle {
+		background-color: var(--input-bg);
 	}
 
 	#subtitle span {
@@ -196,7 +280,7 @@
 	}
 
 	span {
-		color: #eb3b5a;
+		color: var(--primary-color);
 	}
 
 	#input-part,
@@ -205,18 +289,18 @@
 	#loading-part,
 	#error-part {
 		flex: 1;
-		width: 50%;
+		min-width: 0;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 4.5rem;
+		padding: 2rem;
 	}
 
 	#line {
 		height: 90%;
 		width: 2px;
-		background-color: #eb3b5b81;
+		background-color: var(--primary-color);
 	}
 
 	#title {
@@ -244,7 +328,7 @@
 	}
 
 	#subtitle {
-		font-size: 2.5rem;
+		font-size: 2.3rem;
 		margin-top: 0rem;
 		font-family: 'Roboto Mono', monospace;
 		overflow: hidden;
@@ -278,10 +362,10 @@
 
 	#answer {
 		font-size: 1.1rem;
-		background-color: #eb3b5be0;
+		background-color: var(--primary-color);
 		padding: 1rem;
 		border-radius: 0.7rem;
-		color: #f5f5f4;
+		color: #f5f5f5;
 		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.186);
 	}
 
@@ -294,7 +378,7 @@
 		height: 65px;
 	}
 
-	.input-container {
+	#input-container {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -303,7 +387,7 @@
 		cursor: pointer;
 		padding-left: 1rem;
 		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.134);
-		background-color: white;
+		background-color: var(--input-bg);
 	}
 
 	.input {
@@ -313,25 +397,25 @@
 		border: none;
 		outline: none;
 		font-size: 1.1em;
-		background-color: white;
+		background-color: var(--input-bg);
 	}
 
 	.label-for-search {
 		cursor: text;
 		padding: 0px 12px;
-		background-color: white;
+		background-color: var(--input-bg);
 	}
 
 	.search-icon {
 		width: 13px;
-		background-color: white;
+		background-color: var(--input-bg);
 	}
 
 	.search-icon path {
-		fill: #eb3b5a;
+		fill: var(--primary-color);
 	}
 
-	.loader {
+	#loader {
 		font-size: 10px;
 		width: 1em;
 		height: 1em;
@@ -458,11 +542,23 @@
 		}
 	}
 
-	@media only screen and (max-width: 768px) {
+	@media only screen and (max-width: 830px) {
 		main {
 			flex-direction: column;
 			gap: 2rem;
 			padding: 0rem 1rem 5rem 1rem;
+		}
+
+		#wrapper {
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+
+		#toggle {
+			height: 5%;
+			margin-bottom: 1rem;
+			margin-right: 1rem;
 		}
 
 		#input-part,
@@ -478,11 +574,11 @@
 		}
 
 		#main-title {
-			font-size: 1.9rem;
+			font-size: 1.8rem;
 		}
 
 		#subtitle {
-			font-size: 1.7rem;
+			font-size: 1.6rem;
 		}
 
 		#answer-part svg {
