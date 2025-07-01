@@ -118,12 +118,12 @@ span {
 }
 
 #main-title {
-    font-size: 2.5rem;
+    font-size: 2.1rem;
     margin-bottom: 0rem;
 }
 
 #main-title-answer {
-    font-size: 2rem;
+    font-size: 1.6rem;
 }
 
 #main-title-error {
@@ -131,7 +131,7 @@ span {
 }
 
 #subtitle {
-    font-size: 2.3rem;
+    font-size: 2rem;
     margin-top: 0rem;
     font-family: 'Roboto Mono', monospace;
     overflow: hidden;
@@ -151,17 +151,12 @@ span {
     line-height: 1.5;
 }
 
-#explanation-answer {
-    font-size: 1.3rem;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-    padding: 0.3rem 2.5rem;
-}
-
+#explanation-answer,
 #explanation-error {
-    font-size: 1.3rem;
-    margin-top: 1rem;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
     margin-bottom: 2rem;
+    padding: 0.3rem 5rem;
 }
 
 #answer {
