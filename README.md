@@ -26,13 +26,21 @@ A aplicação utiliza a API pública [Agify.io](https://agify.io) para estimar a
 ```bash
 .
 ├── src
+│   ├── lib
+│   │   ├── components
+│   │   │   ├── ArrowIcon
+│   │   │   ├── ErrorIcon
+│   │   │   ├── GlassesIcon
+│   │   │   └── SearchIcon
+│   │   └── styles
+│   │       ├── animations.css
+│   │       ├── theme.css
+│   │       └── variables.css
 │   ├── routes
-│   │   └── +page.svelte   # Página principal
-|   |   └── +layout.svelte # Estilização 
-|   |   └── +page.ts       # Estilização 
-│   ├── styles
-│   │   └── theme.css      # Estilos globais e tema dark/light
-│   └── app.html           # Template base
+│   │   ├── +layout.svelte   # Estilização e layout geral
+│   │   ├── +page.svelte     # Página principal
+│   │   └── +page.ts         # Lógica da página principal
+│   └── app.html             # Template base do app
 └── README.md
 
 ````
