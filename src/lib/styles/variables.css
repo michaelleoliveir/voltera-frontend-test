@@ -1,0 +1,14 @@
+:root {
+    --bg-color: #f5f5f4;
+    --text-color: #444;
+    --primary-color: #eb3b5a;
+    --input-bg: #fff;
+    --input-text: #444;
+}
+
+main.dark-toggle {
+    --bg-color: #1a1a1a;
+    --text-color: #f5f5f5;
+    --input-bg: #333;
+    --input-text: #f5f5f5;
+}

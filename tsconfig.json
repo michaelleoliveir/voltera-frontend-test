@@ -8,6 +8,7 @@
         "noEmit": true
     },
     "include": [
-        "src"
+        "src",
+        "svelte.d.ts"
     ]
 }
