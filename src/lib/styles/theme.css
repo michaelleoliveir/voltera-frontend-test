@@ -253,7 +253,19 @@ span {
         font-size: 1.6rem;
     }
 
+    #explanation-answer {
+        padding: 0.5rem;
+    }
+
     #answer-part svg {
         display: none;
     }
+
+    #toggle-button {
+        width: 5rem;
+    }
+
+    #toggle-indicator.dark-toggle {
+    left: 2.5rem;
+}
 }
